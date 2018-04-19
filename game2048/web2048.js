@@ -63,6 +63,25 @@ function Game () {
 	    }
 	    return _this.quickSort(left).concat([pivot],_this.quickSort(right));
 	};
+	//判断当前操作是否可执行
+	this.operate = function (op) {
+		if (op) {
+			_this.numArr.forEach(function (item,index) {
+				var cur = document.getElementsByClassName("grid-"+index)[0];
+				if (item) {
+					cur.innerText = item;
+					cur.className += " active";
+					_this.spareGrid[index] = "no";
+				} else{
+					cur.innerText = "";
+					cur.className = cur.className.replace(/active/gi,"");
+					_this.spareGrid[index] = index;
+				}
+			})
+			this.getScore();//算分数
+			this.getOneNum();//再获得一个数字
+		}
+	}
 	//监听键盘的下箭头事件
 	this.down = function () {
 		this.numArr = [];
@@ -103,23 +122,8 @@ function Game () {
 				
 			})
 		}
-		//判断是否可操作
-		if (operate) {
-			_this.numArr.forEach(function (item,index) {
-				var cur = document.getElementsByClassName("grid-"+index)[0];
-				if (item) {
-					cur.innerText = item;
-					cur.className += " active";
-					_this.spareGrid[index] = "no";
-				} else{
-					cur.innerText = "";
-					cur.className = cur.className.replace(/active/gi,"");
-					_this.spareGrid[index] = index;
-				}
-			})
-			this.getScore();//算分数
-			this.getOneNum();//再获得一个数字
-		}
+		this.operate(operate);
+		
 			
 			
 	};
@@ -168,23 +172,7 @@ function Game () {
 				
 			})
 		}
-		//判断是否可操作
-		if (operate) {
-			_this.numArr.forEach(function (item,index) {
-				var cur = document.getElementsByClassName("grid-"+index)[0];
-				if (item) {
-					cur.innerText = item;
-					cur.className += " active";
-					_this.spareGrid[index] = "no";
-				} else{
-					cur.innerText = "";
-					cur.className = cur.className.replace(/active/gi,"");
-					_this.spareGrid[index] = index;
-				}
-			})
-			this.getScore();//算分数
-			this.getOneNum();//再获得一个数字
-		}
+		this.operate(operate)
 	}
 }
 var newGame = new Game();
