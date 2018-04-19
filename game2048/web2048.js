@@ -16,8 +16,10 @@ function Game () {
 			curDiv.innerText = "";
 			curDiv.className = "grid-"+item;
 		})
-		var onePos = this.spareGrid.splice(Math.floor(Math.random()*this.spareGrid.length),1);//单元素数组，与字符串拼接时会自动转换为字符串
-		var anotherPos = this.spareGrid.splice(Math.floor(Math.random()*this.spareGrid.length),1);
+		var onePos = Math.floor(Math.random()*16);
+		this.spareGrid[onePos] = "no";//单元素数组，与字符串拼接时会自动转换为字符串
+		var anotherPos = Math.floor(Math.random()*16);
+		this.spareGrid[anotherPos] = "no";
 		var allDivs = document.getElementById("wrap").getElementsByTagName("div").innerText = "";
 		var oneDiv = document.getElementsByClassName("grid-"+onePos)[0];
 		oneDiv.innerText = "2";
@@ -28,12 +30,14 @@ function Game () {
 		console.log(this.spareGrid)
 	};
 	this.getOneNum = function () {
-		var len = this.spareGrid.length;
+		var spareGrid = this.spareGrid.filter((item)=>item!="no");
+		var len = spareGrid.length;
 		if (len>0) {
-			var onePos = this.spareGrid.splice(Math.floor(Math.random()*len),1);
+			var onePos = spareGrid[Math.floor(Math.random()*len)];
 			var oneDiv = document.getElementsByClassName("grid-"+onePos)[0];
 			oneDiv.innerText = "2";
 			oneDiv.className += " active";
+			_this.spareGrid[onePos] = "no";//可用格子里 该项设置为no
 		} else{
 			alert("游戏结束！")
 		}
@@ -51,11 +55,11 @@ function Game () {
 	    var left=[];
 	    var right=[];
 	    for(var i=0;i<arr.length;i++){
-	       if(arr[i]<pivot){
-	         left.push(arr[i]);
-	       }else{
-	         right.push(arr[i]);
-	       }
+	        if(arr[i]<pivot){
+	           left.push(arr[i]);
+	        }else{
+	           right.push(arr[i]);
+	        }
 	    }
 	    return _this.quickSort(left).concat([pivot],_this.quickSort(right));
 	};
@@ -65,46 +69,59 @@ function Game () {
 		var operate = false;
 		for (var i = 0;i<4;i++) {//四列
 			var arr = [];
-			for (var j = 0;j<4;j++) {//先取得每列的四个元素的数值，存在在数组arr中，注意点是，如果为空则在数组前边添加0，否则将数字push到数组后边
+			for (var j = 0;j<4;j++) {//先取得每列的四个元素的数值，存在在数组arr中
 				var k = i+4*j;
 				var num = document.getElementsByClassName("grid-"+k)[0].innerText;
 				if (num) {
 					arr.push(num);
 				} else{
-					arr.unshift(0);
+					arr.push(0);
 				}
 			}
+			//判断是否可操作
+			var str = arr.join("");
+			var reg = /[1-9]+[0]+/;
+			if (reg.test(str)) {
+				operate = true;
+			}
+			arr.forEach(function (item,index) {
+				if (item == 0) {
+					arr.splice(index,1);
+					arr.unshift(0);
+				}
+			})
 			for (var n = 3;n>0;n--) {//对每列的四个数字进行合并
-				if (arr[n] == arr[n-1]) {
+				if (arr[n] == arr[n-1] && arr[n]!=0) {
 					arr[n] = arr[n-1]*2;
 					arr.splice(n-1,1);
 					arr.unshift(0);
+					operate = true;
 				}
 			}
 			arr.forEach(function (item,index) {//每列的四个数字对每列的四个格子进行样式更改，同时将非零数字添加到numArr数组，方便以后排序取最大值
-				var cur = document.getElementsByClassName("grid-"+(i+4*index))[0];
+				_this.numArr[i+4*index] = item;
+				
+			})
+		}
+		//判断是否可操作
+		if (operate) {
+			_this.numArr.forEach(function (item,index) {
+				var cur = document.getElementsByClassName("grid-"+index)[0];
 				if (item) {
 					cur.innerText = item;
 					cur.className += " active";
-					_this.spareGrid.forEach(function (item,index2) {
-						if (item == i+4*index) {
-							_this.spareGrid.splice(index2,1)
-						}
-					})
-					_this.numArr.push(item);
+					_this.spareGrid[index] = "no";
 				} else{
 					cur.innerText = "";
 					cur.className = cur.className.replace(/active/gi,"");
-					var spare = i+4*index;
-					if(_this.spareGrid.indexOf(spare) == -1) {
-						_this.spareGrid.push(spare);
-					}
-
+					_this.spareGrid[index] = index;
 				}
 			})
+			this.getScore();//算分数
+			this.getOneNum();//再获得一个数字
 		}
-		this.getScore();//算分数
-		this.getOneNum();//再获得一个数字
+			
+			
 	};
 	this.up = function () {
 		
@@ -114,48 +131,60 @@ function Game () {
 	};
 	this.right = function () {
 		this.numArr = [];
+		var operate = false;
 		for (var i = 0;i<4;i++) {//四行
 			var arr = [];
-			for (var j = 0;j<4;j++) {//先取得每行的四个元素的数值，存在在数组arr中，注意点是，如果为空则在数组前边添加0，否则将数字push到数组后边
+			for (var j = 0;j<4;j++) {//先取得每行的四个元素的数值，存在在数组arr中
 				var k = j+4*i;
 				var num = document.getElementsByClassName("grid-"+k)[0].innerText;
 				if (num) {
 					arr.push(num);
 				} else{
-					arr.unshift(0);
+					arr.push(0);
 				}
 			}
-			for (var n = 3;n>0;n--) {//对每行的四个数字进行合并
-				if (arr[n] == arr[n-1]) {
+			//判断是否可操作
+			var str = arr.join("");
+			var reg = /[1-9]+[0]+/;
+			if (reg.test(str)) {
+				operate = true;
+			}
+			arr.forEach(function (item,index) {
+				if (item == 0) {
+					arr.splice(index,1);
+					arr.unshift(0);
+				}
+			})
+			for (var n = 3;n>0;n--) {//对每列的四个数字进行合并
+				if (arr[n] == arr[n-1] && arr[n]!=0) {
 					arr[n] = arr[n-1]*2;
 					arr.splice(n-1,1);
 					arr.unshift(0);
+					operate = true;
 				}
 			}
-			arr.forEach(function (item,index) {//每行的四个数字对每列的四个格子进行样式更改，同时将非零数字添加到numArr数组，方便以后排序取最大值
-				var cur = document.getElementsByClassName("grid-"+(4*i+index))[0];
+			arr.forEach(function (item,index) {//每列的四个数字对每列的四个格子进行样式更改，同时将非零数字添加到numArr数组，方便以后排序取最大值
+				_this.numArr[4*i+index] = item;
+				
+			})
+		}
+		//判断是否可操作
+		if (operate) {
+			_this.numArr.forEach(function (item,index) {
+				var cur = document.getElementsByClassName("grid-"+index)[0];
 				if (item) {
 					cur.innerText = item;
 					cur.className += " active";
-					_this.spareGrid.forEach(function (item,index2) {//在空余格子数组里 删除填充了内容的这一项
-						if (item == 4*i+index) {
-							_this.spareGrid.splice(index2,1)
-						}
-					})
-					_this.numArr.push(item);
+					_this.spareGrid[index] = "no";
 				} else{
 					cur.innerText = "";
 					cur.className = cur.className.replace(/active/gi,"");
-					var spare = i+4*index;
-					if(_this.spareGrid.indexOf(spare) == -1) { //在空余格子数组里增加一项
-						_this.spareGrid.push(spare);
-					}
-
+					_this.spareGrid[index] = index;
 				}
 			})
+			this.getScore();//算分数
+			this.getOneNum();//再获得一个数字
 		}
-		this.getScore();//算分数
-		this.getOneNum();//再获得一个数字
 	}
 }
 var newGame = new Game();
