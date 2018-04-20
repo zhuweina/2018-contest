@@ -263,6 +263,7 @@ var newGame = new Game();
 newGame.init();
 var resetBtn = document.getElementsByTagName("button")[0];
 var resetBtn2 = document.getElementsByTagName("button")[1];
+var resetBtn3 = document.getElementsByTagName("button")[2];
 resetBtn.addEventListener("click",function () {
 	newGame.init();
 })
@@ -275,6 +276,12 @@ resetBtn2.addEventListener("click",function () {
 })
 resetBtn2.addEventListener("touchstart",function () {
 	newGame.init();
+	document.getElementById("alert").style.visibility = "hidden";
+})
+resetBtn3.addEventListener("click",function () {
+	document.getElementById("alert").style.visibility = "hidden";
+})
+resetBtn3.addEventListener("touchstart",function () {
 	document.getElementById("alert").style.visibility = "hidden";
 })
 //PC端键盘事件
