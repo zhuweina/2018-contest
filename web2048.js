@@ -123,12 +123,56 @@ function Game () {
 			})
 		}
 		this.operate(operate);
-		
-			
-			
 	};
 	this.up = function () {
-		
+		this.numArr = [];//存在每个格子对应的数字
+		var operate = false;
+		for (var i = 0;i<4;i++) {//四列
+			var arr = [];
+			for (var j = 0;j<4;j++) {//先取得每列的四个元素的数值，存在在数组arr中
+				var k = i+4*j;
+				var num = document.getElementsByClassName("grid-"+k)[0].innerText;
+				if (num) {
+					arr.push(num);
+				} else{
+					arr.push(0);
+				}
+			}
+			//判断是否可操作
+			var str = arr.join("");
+			var reg = /[0]+[1-9]+/;
+			if (reg.test(str)) {
+				operate = true;
+			}
+			for (var m = 3;m>=0;m--) {
+				if (arr[m] == 0) {
+					arr.splice(m,1);
+					arr.push(0);
+					
+				}
+			}
+//			debugger;
+//			arr.forEach(function (item,index) {
+//				if (item == 0) {
+//					arr.splice(index,1);
+//					arr.push(0);
+//				}
+//			})
+//			debugger;
+			for (var n = 0;n<4;n++) {//对每列的四个数字进行合并
+				if (arr[n] == arr[n+1] && arr[n]!=0) {
+					arr[n] = arr[n+1]*2;
+					arr.splice(n+1,1);
+					arr.push(0);
+					operate = true;
+				}
+			}
+			arr.forEach(function (item,index) {//每列的四个数字对每列的四个格子进行样式更改，同时将非零数字添加到numArr数组，方便以后排序取最大值
+				_this.numArr[i+4*index] = item;
+				
+			})
+		}
+		this.operate(operate);
 	};
 	this.left = function () {
 		
