@@ -9,50 +9,168 @@ html,body {
 	font-weight: bold;
 }
 
-#wrap {
-	width: 400px;
-	height: 400px;
-	background-color: #B0A597;
-	border-radius: 10px;
-	padding: 20px;
-	display: flex;
-	justify-content: space-between;
-	flex-flow: wrap;
-	align-items:stretch;
-	flex-direction: row;
-	align-content: space-between;
-}
-
-#wrap>div {
-	flex: 0 0 auto;
-	width: 87px;
-	height:87px;
-	background-color: #C4B9AA;
-	border-radius: 5px;
-	color: #FFFFFF;
-	font-size: 30px;
-	line-height: 87px;
+@media only screen and (max-width:1000px ) {
+	#wrap {
+		width: 700px;
+		height: 700px;
+		background-color: #B0A597;
+		border-radius: 10px;
+		padding: 30px;
+		display: flex;
+		justify-content: space-between;
+		flex-flow: wrap;
+		align-items:stretch;
+		flex-direction: row;
+		align-content: space-between;
+		font-size: 2rem;
+	}
 	
+	#wrap>div {
+		position: relative;
+		flex: 0 0 auto;
+		width: 150px;
+		height:150px;
+		background-color: #C4B9AA;
+		border-radius: 5px;
+		color: #FFFFFF;
+		font-size: 3rem;
+		line-height: 150px;
+	}
+	
+	p{font-size: 2rem;}
 }
 
-button {
-	width: 120px;
-	height: 50px;
-	background-color: #B0A597;
-	border-radius: 10px;
-	outline: none;
-	border: none;
-	color: #fff;
-	font-size: 20px;
-	font-weight: bold;
-	cursor: pointer;
+@media only screen and (min-width:1000px ) {
+	#wrap {
+		width: 400px;
+		height: 400px;
+		background-color: #B0A597;
+		border-radius: 10px;
+		padding: 20px;
+		display: flex;
+		justify-content: space-between;
+		flex-flow: wrap;
+		align-items:stretch;
+		flex-direction: row;
+		align-content: space-between;
+	}
+	#wrap>div {
+		position: relative;
+		flex: 0 0 auto;
+		width: 87px;
+		height:87px;
+		background-color: #C4B9AA;
+		border-radius: 5px;
+		color: #FFFFFF;
+		font-size: 30px;
+		line-height: 87px;
+	}
 }
+
+
+
+#wrap>div>div {
+	border-radius: 5px;
+}
+
+@media only screen and (min-width:1000px ) {
+		button {
+		width: 120px;
+		height: 50px;
+		background-color: #B0A597;
+		border-radius: 10px;
+		outline: none;
+		border: none;
+		color: #fff;
+		font-size: 20px;
+		font-weight: bold;
+		cursor: pointer;
+	}
+}
+
+
+@media only screen and (max-width:1000px ) {
+	button {
+		width: 260px;
+		height: 100px;
+		background-color: #B0A597;
+		border-radius: 10px;
+		outline: none;
+		border: none;
+		color: #fff;
+		font-size: 2rem;
+		font-weight: bold;
+		cursor: pointer;
+	}
+}
+
 
 button:hover {
 	background-color:#C4B9AA ;
 }
 
-#wrap>div.active {
+#wrap .active {
+	animation: newNum .5s 1;
 	background-color: #EAE1D5;
 	color: #333;
 }
+@-webkit-keyframes newNum{
+	from{background-color: rgba(234,225,213,0.5);transform: scale(0.5);}
+	to{background-color: rgba(234,225,213,1);transform: scale(1);}
+}
+#wrap .style-2 {background-color: #EAE1D5;color: #333;}
+#wrap .style-4 {background-color: #E8DDC1;color: #333;}
+#wrap .style-8 {background-color: #E6A96D;color: #fff;}
+#wrap .style-16 {background-color: #FF7F50;color: #fff;}
+#wrap .style-32 {background-color: #E57256;color: #fff;}
+#wrap .style-64 {background-color: #E45435;color: #fff;}
+#wrap .style-128 {background-color: #E5CA64;color: #fff;}
+#wrap .style-256 {background-color: #ecbd38;color: #fff;}
+#wrap .style-512 {background-color: #ecbd38;color: #fff;}
+#wrap .style-1024 {background-color: #e2ab2e;color: #fff;}
+
+#wrap .style-2048 {
+	background-color: #E3BC19;
+	color: #333;
+	box-shadow: 0 0 30px #ecdf3d;
+}
+
+#alert {
+	visibility: visible;
+	z-index: 2;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0,0,0,.5);
+}
+
+@media only screen and (min-width:1000px ) {
+	#alert>div {
+		width: 250px;
+	    height: 150px;
+	    background-color: #fff;
+	    border-radius: 10px;
+	    color: #B0A597;
+	}
+	#alert p {
+	    font-size: 24px;
+	    margin-bottom: 15px;
+	}
+}
+
+@media only screen and (max-width:1000px ) {
+	#alert>div {
+		width: 450px;
+	    height: 300px;
+	    background-color: #fff;
+	    border-radius: 10px;
+	    color: #B0A597;
+	}
+	#alert p {
+	    font-size: 2rem;
+	}
+}
+
